@@ -6,43 +6,101 @@ class Program
 {
     static void Main(string[] args)
     {
-        ProductDAO productDao = new ProductDAO();
-        SupplierDAO supplierDao = new SupplierDAO();
-        CustomerDAO customerDao = new CustomerDAO();
-        OrderDAO orderDao = new OrderDAO();
-        OrderProductDAO orderProductDao = new OrderProductDAO();
+        var productDao = new ProductDAO();
+        var supplierDao = new SupplierDAO();
+        var customerDao = new CustomerDAO();
+        var orderDao = new OrderDAO();
+        var orderProductDao = new OrderProductDAO();
 
-        /*
-        Product product = new Product("rizek", 2.90);
-        productDao.Insert(product);
-        Console.WriteLine("Id of new student " + product.Id);
+        Console.WriteLine("Products: ");
+        // var product = new Product("rizek", 2.90);
+        // productDao.Insert(product);
+        // Console.WriteLine("Id of new product " + product.Id);
+        //
+        // var product2 = new Product("smazak", 5.90);
+        // productDao.Insert(product2);
+        // Console.WriteLine("Id of new product " + product2.Id);
         
-        Product product2 = new Product("smazak", 5.90);
-        productDao.Insert(product);
-        Console.WriteLine("Id of new student " + product.Id);*/
+        productDao.DeleteAll();
         
-        /*productDao.DeleteAll();*/
-        
-        /*dao.Delete(product);*/
+        /*productDao.Delete(product);*/
 
         foreach (var s in productDao.GetAll())
         {
             Console.WriteLine(s);
         }
         
-        /*
-        Product product = new Product("rizek", 2.90);
-        productDao.Insert(product);
-        Console.WriteLine("Id of new student " + product.Id);
-
-        Product product2 = new Product("smazak", 5.90);
-        productDao.Insert(product);
-        Console.WriteLine("Id of new student " + product.Id);*/
+        Console.WriteLine("Suppliers: ");
+        // var supplier = new Supplier("Jakub");
+        // supplierDao.Insert(supplier);
+        // Console.WriteLine("Id of new supplier " + supplier.Id);
+        //
+        // var supplier2 = new Supplier("Honza");
+        // supplierDao.Insert(supplier2);
+        // Console.WriteLine("Id of new supplier " + supplier2.Id);
         
-        /*productDao.DeleteAll();*/
+        supplierDao.DeleteAll();
         
-        /*dao.Delete(product);*/
+        /*supplierDao.Delete(supplier);*/
         
+        foreach (var s in supplierDao.GetAll())
+        {
+            Console.WriteLine(s);
+        }
+        
+        Console.WriteLine("Customers: ");
+        // var customer = new Customer("Tomáš");
+        // customerDao.Insert(customer);
+        // Console.WriteLine("Id of new customer " + customer.Id);
+        //
+        // var customer2 = new Customer("Lukáš");
+        // customerDao.Insert(customer2);
+        // Console.WriteLine("Id of new customer " + customer2.Id);
+        
+        customerDao.DeleteAll();
+        
+        /*customerDao.Delete(customer);*/
+        
+        foreach (var s in customerDao.GetAll())
+        {
+            Console.WriteLine(s);
+        }
+        
+        Console.WriteLine("Orders: ");
+        // var order = new Order(new DateTime(2020, 1, 5), true);
+        // orderDao.Insert(order);
+        // Console.WriteLine("Id of new order " + order.Id);
+        //
+        // var order2 = new Order(new DateTime(2019, 12, 10), false);
+        // orderDao.Insert(order2);
+        // Console.WriteLine("Id of new order " + order2.Id);
+        
+        orderDao.DeleteAll();
+        
+        /*orderDao.Delete(order);*/
+        
+        foreach (var s in orderDao.GetAll())
+        {
+            Console.WriteLine(s);
+        }
+        
+        Console.WriteLine("OrderProducts: ");
+        // var orderProduct = new OrderProduct(2, 13, 1);
+        // orderProductDao.Insert(orderProduct);
+        // Console.WriteLine("Id of new orderProduct " + orderProduct.Id);
+        //
+        // var orderProduct2 = new OrderProduct(1, 14, 2);
+        // orderProductDao.Insert(orderProduct2);
+        // Console.WriteLine("Id of new orderProduct " + orderProduct2.Id);
+        
+        orderProductDao.DeleteAll();
+        
+        /*orderProductDao.Delete(orderProduct);*/
+        
+        foreach (var s in orderProductDao.GetAll())
+        {
+            Console.WriteLine(s);
+        }
         
     }
 }

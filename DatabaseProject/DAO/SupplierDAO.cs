@@ -66,7 +66,7 @@ public class SupplierDAO : IDAO<Supplier>
     {
         SqlConnection connection = DatabaseSingleton.GetInstance();
 
-        using SqlCommand command = new SqlCommand("ALTER TABLE product DROP COLUMN id", connection);
+        using SqlCommand command = new SqlCommand("ALTER TABLE supplier DROP COLUMN id", connection);
         command.Parameters.Add(new SqlParameter("@id", supplier.Id));
         command.ExecuteNonQuery();
         supplier.Id = 10;

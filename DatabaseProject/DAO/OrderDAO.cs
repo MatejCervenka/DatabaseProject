@@ -10,7 +10,7 @@ public class OrderDAO
         Order order = null;
         SqlConnection connection = DatabaseSingleton.GetInstance();
         // 1. declare command object with parameter
-        using SqlCommand command = new SqlCommand("SELECT * FROM order WHERE id = @Id", connection);
+        using SqlCommand command = new SqlCommand("SELECT * FROM order_ WHERE id = @Id", connection);
         // 2. define parameters used in command 
         SqlParameter param = new SqlParameter();
         param.ParameterName = "@Id";
@@ -37,7 +37,7 @@ public class OrderDAO
     {
         SqlConnection connection = DatabaseSingleton.GetInstance();
 
-        using SqlCommand command = new SqlCommand("SELECT * FROM order", connection);
+        using SqlCommand command = new SqlCommand("SELECT * FROM order_", connection);
         SqlDataReader reader = command.ExecuteReader();
         while (reader.Read())
         {
@@ -58,8 +58,7 @@ public class OrderDAO
 
         SqlCommand command = null;
 
-        using var sqlCommand = command =
-            new SqlCommand("INSERT INTO order (orderDate, isShipped) VALUES (@orderDate, @isShipped)", connection);
+        using var sqlCommand = command = new SqlCommand("INSERT INTO order_ (orderDate, isShipped) VALUES (@orderDate, @isShipped)", connection);
         command.Parameters.Add(new SqlParameter("@orderDate", order.OrderDate));
         command.Parameters.Add(new SqlParameter("@isShipped", order.IsShipped));
         command.ExecuteNonQuery();
@@ -72,7 +71,7 @@ public class OrderDAO
     {
         SqlConnection connection = DatabaseSingleton.GetInstance();
 
-        using SqlCommand command = new SqlCommand("ALTER TABLE product DROP COLUMN id", connection);
+        using SqlCommand command = new SqlCommand("ALTER TABLE order_ DROP COLUMN id", connection);
         command.Parameters.Add(new SqlParameter("@id", order.Id));
         command.ExecuteNonQuery();
         order.Id = 10;
@@ -84,7 +83,7 @@ public class OrderDAO
 
         SqlCommand command = null;
 
-        using (command = new SqlCommand("UPDATE order SET orderDate = @orderDate, isShipped = @isShipped" +
+        using (command = new SqlCommand("UPDATE order_ SET orderDate = @orderDate, isShipped = @isShipped" +
                                         "WHERE id = @id", connection))
         {
             command.Parameters.Add(new SqlParameter("@id", order.Id));
@@ -98,7 +97,7 @@ public class OrderDAO
     {
         SqlConnection connection = DatabaseSingleton.GetInstance();
 
-        using SqlCommand command = new SqlCommand("DELETE FROM order", connection);
+        using SqlCommand command = new SqlCommand("DELETE FROM order_", connection);
         command.ExecuteNonQuery();
     }
 }

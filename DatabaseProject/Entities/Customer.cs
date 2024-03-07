@@ -10,6 +10,12 @@ public class Customer : IBaseClass
         Id = id;
         Name = name;
     }
+    
+    public Customer(string name)
+    {
+        Id = 0;
+        Name = name;
+    }
 
     public override string ToString()
     {

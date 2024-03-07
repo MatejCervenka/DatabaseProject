@@ -12,6 +12,13 @@ public class Order : IBaseClass
         OrderDate = orderDate;
         IsShipped = isShipped;
     }
+    
+    public Order(DateTime orderDate, bool isShipped)
+    {
+        Id = 0;
+        OrderDate = orderDate;
+        IsShipped = isShipped;
+    }
 
     public override string ToString()
     {

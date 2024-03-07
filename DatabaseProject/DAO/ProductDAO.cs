@@ -72,7 +72,7 @@ public class ProductDAO : IDAO<Product>
         using SqlCommand command = new SqlCommand("ALTER TABLE product DROP COLUMN id", connection);
         command.Parameters.Add(new SqlParameter("@id", product.Id));
         command.ExecuteNonQuery();
-        product.Id = 10;
+        product.Id = 0;
     }
 
     public void Update(Product product)

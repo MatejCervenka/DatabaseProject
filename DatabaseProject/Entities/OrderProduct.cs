@@ -3,13 +3,21 @@ namespace DatabaseProject.Entities;
 public class OrderProduct : IBaseClass
 {
     public int Id { get; set; }
-    private int OrderId { get; set; }
-    private int ProductId { get; set; }
-    private int Quantity { get; set; }
+    public int OrderId { get; set; }
+    public int ProductId { get; set; }
+    public int Quantity { get; set; }
 
     public OrderProduct(int id, int orderId, int productId, int quantity)
     {
         Id = id;
+        OrderId = orderId;
+        ProductId = productId;
+        Quantity = quantity;
+    }
+    
+    public OrderProduct(int orderId, int productId, int quantity)
+    {
+        Id = 0;
         OrderId = orderId;
         ProductId = productId;
         Quantity = quantity;

@@ -10,7 +10,13 @@ public class Supplier : IBaseClass
         Id = id;
         Name = name;
     }
-
+    
+    public Supplier(string name)
+    {
+        Id = 0;
+        Name = name;
+    }
+    
     public override string ToString()
     {
         return $"Supplier: {Id}, Name: {Name}";
