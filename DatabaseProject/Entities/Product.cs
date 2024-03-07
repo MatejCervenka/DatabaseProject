@@ -1,19 +1,19 @@
 namespace DatabaseProject.Entities;
 
-public class Product
+public class Product : IBaseClass
 {
-    private int Id { get; set; }
-    private string Name { get; set; }
-    private float Price { get; set; }
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public double Price { get; set; }
 
-    public Product(int id, string name, float price)
+    public Product(int id, string name, double price)
     {
         Id = id;
         Name = name;
         Price = price;
     }
     
-    public Product(string name, float price)
+    public Product(string name, double price)
     {
         Id = 0;
         Name = name;

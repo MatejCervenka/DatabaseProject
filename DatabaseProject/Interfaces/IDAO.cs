@@ -2,8 +2,12 @@ namespace DatabaseProject;
 
 public interface IDAO<T> where T : IBaseClass
 {
-    T? GetByID(int id);
+    T? GetById(int id);
     IEnumerable<T> GetAll();
-    void Save(T element);
+    void Insert(T element);
     void Delete(T element);
+    
+    void Update(T element);
+    
+    void DeleteAll();
 }

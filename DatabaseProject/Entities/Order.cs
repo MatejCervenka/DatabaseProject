@@ -1,10 +1,10 @@
 namespace DatabaseProject.Entities;
 
-public class Order
+public class Order : IBaseClass
 {
-    private int Id { get; set; }
-    private DateTime OrderDate { get; set; }
-    private bool IsShipped { get; set; }
+    public int Id { get; set; }
+    public DateTime OrderDate { get; set; }
+    public bool IsShipped { get; set; }
 
     public Order(int id, DateTime orderDate, bool isShipped)
     {

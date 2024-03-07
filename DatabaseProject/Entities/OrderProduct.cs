@@ -1,8 +1,8 @@
 namespace DatabaseProject.Entities;
 
-public class OrderProduct
+public class OrderProduct : IBaseClass
 {
-    private int Id { get; set; }
+    public int Id { get; set; }
     private int OrderId { get; set; }
     private int ProductId { get; set; }
     private int Quantity { get; set; }
