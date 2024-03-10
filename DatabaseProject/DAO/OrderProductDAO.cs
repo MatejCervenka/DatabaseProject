@@ -61,7 +61,6 @@ public class OrderProductDAO : IDAO<OrderProduct>
     {
         SqlConnection connection = DatabaseSingleton.GetInstance();
         SqlCommand command = null;
-
         
         using (command = new SqlCommand("SELECT * FROM orderProduct WHERE id = @orderProductId", connection))
         {
