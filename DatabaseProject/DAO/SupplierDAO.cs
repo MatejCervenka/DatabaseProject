@@ -5,32 +5,6 @@ namespace DatabaseProject;
 
 public class SupplierDAO : IDAO<Supplier>
 {
-    public Supplier? GetById(int id)
-    {
-        Supplier supplier = null;
-        SqlConnection connection = DatabaseSingleton.GetInstance();
-        // 1. declare command object with parameter
-        using SqlCommand command = new SqlCommand("SELECT * FROM supplier WHERE id = @Id", connection);
-        // 2. define parameters used in command 
-        SqlParameter param = new SqlParameter();
-        param.ParameterName = "@Id";
-        param.Value = id;
-
-        // 3. add new parameter to command object
-        command.Parameters.Add(param);
-        SqlDataReader reader = command.ExecuteReader();
-
-        while (reader.Read())
-        {
-            supplier = new Supplier(
-                Convert.ToInt32(reader[0].ToString()),
-                reader[1].ToString()
-            );
-        }
-        reader.Close();
-        return supplier;
-    }
-
     public IEnumerable<Supplier> GetAll()
     {
         SqlConnection connection = DatabaseSingleton.GetInstance();
@@ -48,7 +22,7 @@ public class SupplierDAO : IDAO<Supplier>
         reader.Close();
     }
 
-    public void Insert(Supplier supplier)
+    public void Add(Supplier supplier)
     {
         SqlConnection connection = DatabaseSingleton.GetInstance();
 
@@ -57,19 +31,42 @@ public class SupplierDAO : IDAO<Supplier>
         using var sqlCommand = command = new SqlCommand("INSERT INTO supplier (name_) VALUES (@name_)", connection);
         command.Parameters.Add(new SqlParameter("@name_", supplier.Name));
         command.ExecuteNonQuery();
-        //zjistim id posledniho vlozeneho zaznamu
-        command.CommandText = "Select @@Identity";
-        supplier.Id = Convert.ToInt32(command.ExecuteScalar());
+        Console.WriteLine("Supplier added");
     }
 
-    public void Delete(Supplier supplier)
+    public void Delete(int id)
     {
         SqlConnection connection = DatabaseSingleton.GetInstance();
+        SqlCommand command = null;
 
-        using SqlCommand command = new SqlCommand("ALTER TABLE supplier DROP COLUMN id", connection);
-        command.Parameters.Add(new SqlParameter("@id", supplier.Id));
-        command.ExecuteNonQuery();
-        supplier.Id = 10;
+
+        using (command = new SqlCommand("SELECT * FROM supplier WHERE id = @supplierId", connection))
+        {
+            command.Parameters.AddWithValue("@supplierId", id);
+        }
+
+        using (SqlDataReader reader = command.ExecuteReader())
+        {
+            if (reader.Read())
+            {
+
+                Console.WriteLine("Supplier is being removed");
+            }
+            else
+            {
+                Console.WriteLine("Supplier with this id was not found.");
+                return;
+            }
+        }
+
+        SqlCommand deleteCmd = null;
+        using (deleteCmd = new SqlCommand("DELETE FROM supplier WHERE id = @ID", connection))
+        {
+            deleteCmd.Parameters.AddWithValue("@ID", id);
+            deleteCmd.ExecuteNonQuery();
+        }
+
+        Console.WriteLine("Supplier has been successfully removed");
     }
 
     public void Update(Supplier supplier)

@@ -28,7 +28,6 @@ public class DatabaseSingleton
             consStringBuilder.DataSource = ReadSetting("DataSource");
             consStringBuilder.ConnectTimeout = 30;
             connection = new SqlConnection(consStringBuilder.ConnectionString);
-            Console.WriteLine("Connected");
             connection.Open();
         }
         return connection;

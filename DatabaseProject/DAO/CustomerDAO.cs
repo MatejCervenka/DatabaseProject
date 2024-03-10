@@ -3,33 +3,8 @@ using DatabaseProject.Entities;
 
 namespace DatabaseProject;
 
-public class CustomerDAO
+public class CustomerDAO : IDAO<Customer>
 {
-    public Customer? GetById(int id)
-    {
-        Customer customer = null;
-        SqlConnection connection = DatabaseSingleton.GetInstance();
-        // 1. declare command object with parameter
-        using SqlCommand command = new SqlCommand("SELECT * FROM customer WHERE id = @Id", connection);
-        // 2. define parameters used in command 
-        SqlParameter param = new SqlParameter();
-        param.ParameterName = "@Id";
-        param.Value = id;
-
-        // 3. add new parameter to command object
-        command.Parameters.Add(param);
-        SqlDataReader reader = command.ExecuteReader();
-
-        while (reader.Read())
-        {
-            customer = new Customer(
-                Convert.ToInt32(reader[0].ToString()),
-                reader[1].ToString()
-            );
-        }
-        reader.Close();
-        return customer;
-    }
 
     public IEnumerable<Customer> GetAll()
     {
@@ -48,28 +23,51 @@ public class CustomerDAO
         reader.Close();
     }
 
-    public void Insert(Customer customer)
+    public void Add(Customer customer)
     {
         SqlConnection connection = DatabaseSingleton.GetInstance();
-
+        
         SqlCommand command = null;
 
         using var sqlCommand = command = new SqlCommand("INSERT INTO customer (name_) VALUES (@name_)", connection);
         command.Parameters.Add(new SqlParameter("@name_", customer.Name));
         command.ExecuteNonQuery();
-        //zjistim id posledniho vlozeneho zaznamu
-        command.CommandText = "Select @@Identity";
-        customer.Id = Convert.ToInt32(command.ExecuteScalar());
+        Console.WriteLine("Customer added");
     }
 
-    public void Delete(Customer customer)
+    public void Delete(int id)
     {
         SqlConnection connection = DatabaseSingleton.GetInstance();
+        SqlCommand command = null;
 
-        using SqlCommand command = new SqlCommand("ALTER TABLE customer DROP COLUMN id", connection);
-        command.Parameters.Add(new SqlParameter("@id", customer.Id));
-        command.ExecuteNonQuery();
-        customer.Id = 10;
+
+        using (command = new SqlCommand("SELECT * FROM customer WHERE id = @customerId", connection))
+        {
+            command.Parameters.AddWithValue("@customerId", id);
+        }
+
+        using (SqlDataReader reader = command.ExecuteReader())
+        {
+            if (reader.Read())
+            {
+
+                Console.WriteLine("Customer is being removed");
+            }
+            else
+            {
+                Console.WriteLine("Customer with this id was not found.");
+                return;
+            }
+        }
+
+        SqlCommand deleteCmd = null;
+        using (deleteCmd = new SqlCommand("DELETE FROM customer WHERE id = @ID", connection))
+        {
+            deleteCmd.Parameters.AddWithValue("@ID", id);
+            deleteCmd.ExecuteNonQuery();
+        }
+
+        Console.WriteLine("Customer has been successfully removed");
     }
 
     public void Update(Customer customer)

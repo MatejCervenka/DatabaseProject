@@ -7,6 +7,10 @@ public class OrderProduct : IBaseClass
     public int ProductId { get; set; }
     public int Quantity { get; set; }
 
+    public OrderProduct()
+    {
+    }
+
     public OrderProduct(int id, int orderId, int productId, int quantity)
     {
         Id = id;

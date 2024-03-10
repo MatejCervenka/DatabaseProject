@@ -5,34 +5,6 @@ namespace DatabaseProject;
 
 public class OrderDAO
 {
-    public Order GetById(int id)
-    {
-        Order order = null;
-        SqlConnection connection = DatabaseSingleton.GetInstance();
-        // 1. declare command object with parameter
-        using SqlCommand command = new SqlCommand("SELECT * FROM order_ WHERE id = @Id", connection);
-        // 2. define parameters used in command 
-        SqlParameter param = new SqlParameter();
-        param.ParameterName = "@Id";
-        param.Value = id;
-
-        // 3. add new parameter to command object
-        command.Parameters.Add(param);
-        SqlDataReader reader = command.ExecuteReader();
-
-        while (reader.Read())
-        {
-            order = new Order(
-                Convert.ToInt32(reader[0].ToString()),
-                Convert.ToDateTime(reader[1].ToString()),
-                Convert.ToBoolean(reader[2].ToString())
-            );
-        }
-
-        reader.Close();
-        return order;
-    }
-
     public IEnumerable<Order> GetAll()
     {
         SqlConnection connection = DatabaseSingleton.GetInstance();
@@ -52,7 +24,7 @@ public class OrderDAO
         reader.Close();
     }
 
-    public void Insert(Order order)
+    public void Add(Order order)
     {
         SqlConnection connection = DatabaseSingleton.GetInstance();
 
@@ -62,19 +34,35 @@ public class OrderDAO
         command.Parameters.Add(new SqlParameter("@orderDate", order.OrderDate));
         command.Parameters.Add(new SqlParameter("@isShipped", order.IsShipped));
         command.ExecuteNonQuery();
-        //zjistim id posledniho vlozeneho zaznamu
-        command.CommandText = "Select @@Identity";
-        order.Id = Convert.ToInt32(command.ExecuteScalar());
+        Console.WriteLine("Order added");
     }
 
-    public void Delete(Order order)
+    public void Delete(int id)
     {
         SqlConnection connection = DatabaseSingleton.GetInstance();
+        SqlCommand command = null;
+        
+        using (command = new SqlCommand("SELECT * FROM order_ WHERE id = @orderId", connection))
+        {
+            command.Parameters.AddWithValue("@orderId", id);
+        }
 
-        using SqlCommand command = new SqlCommand("ALTER TABLE order_ DROP COLUMN id", connection);
-        command.Parameters.Add(new SqlParameter("@id", order.Id));
-        command.ExecuteNonQuery();
-        order.Id = 10;
+        using (SqlDataReader reader = command.ExecuteReader())
+        {
+            if (reader.Read())
+            {
+                Console.WriteLine("Product is being used in orderProduct. Cannot delete.");
+                return;
+            }
+        }
+
+        SqlCommand deleteCmd = null;
+        using (deleteCmd = new SqlCommand("DELETE FROM order_ WHERE id = @ID"))
+        {
+            deleteCmd.Parameters.AddWithValue("@ID", id); 
+            deleteCmd.ExecuteNonQuery();
+        }
+        Console.WriteLine("Order has been successfully removed");
     }
 
     public void Update(Order order)

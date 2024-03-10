@@ -6,6 +6,10 @@ public class Order : IBaseClass
     public DateTime OrderDate { get; set; }
     public bool IsShipped { get; set; }
 
+    public Order()
+    {
+    }
+
     public Order(int id, DateTime orderDate, bool isShipped)
     {
         Id = id;

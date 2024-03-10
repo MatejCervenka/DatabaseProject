@@ -1,37 +1,13 @@
 using System.Data.SqlClient;
+using System.Globalization;
+using CsvHelper;
 using DatabaseProject.Entities;
 
 namespace DatabaseProject;
 
 public class ProductDAO : IDAO<Product>
 {
-    public Product? GetById(int id)
-    { 
-        Product product = null;
-        SqlConnection connection = DatabaseSingleton.GetInstance();
-        // 1. declare command object with parameter
-        using SqlCommand command = new SqlCommand("SELECT * FROM product WHERE id = @Id", connection);
-        // 2. define parameters used in command 
-        SqlParameter param = new SqlParameter();
-        param.ParameterName = "@Id";
-        param.Value = id;
-
-        // 3. add new parameter to command object
-        command.Parameters.Add(param);
-        SqlDataReader reader = command.ExecuteReader();
-
-        while (reader.Read())
-        {
-            product = new Product(
-                Convert.ToInt32(reader[0].ToString()),
-                reader[1].ToString(),
-                Convert.ToDouble(reader[2].ToString())
-            );
-        }
-        reader.Close();
-        return product;
-    }
-
+    
     public IEnumerable<Product> GetAll()
     {
         SqlConnection connection = DatabaseSingleton.GetInstance();
@@ -50,29 +26,46 @@ public class ProductDAO : IDAO<Product>
         reader.Close();
     }
 
-    public void Insert(Product product)
+    public void Add(Product product)
     {
         SqlConnection connection = DatabaseSingleton.GetInstance();
-
+        
         SqlCommand command = null;
 
         using var sqlCommand = command = new SqlCommand("INSERT INTO product (name_, price) VALUES (@name_, @price)", connection);
         command.Parameters.Add(new SqlParameter("@name_", product.Name));
         command.Parameters.Add(new SqlParameter("@price", product.Price));
         command.ExecuteNonQuery();
-        //zjistim id posledniho vlozeneho zaznamu
-        command.CommandText = "Select @@Identity";
-        product.Id = Convert.ToInt32(command.ExecuteScalar());
+        Console.WriteLine("Product added");
     }
-    
-    public void Delete(Product product)
+
+    public void Delete(int id)
     {
         SqlConnection connection = DatabaseSingleton.GetInstance();
+        SqlCommand command = null;
 
-        using SqlCommand command = new SqlCommand("ALTER TABLE product DROP COLUMN id", connection);
-        command.Parameters.Add(new SqlParameter("@id", product.Id));
-        command.ExecuteNonQuery();
-        product.Id = 0;
+        using (command = new SqlCommand("SELECT * FROM orderProduct WHERE product_id = @productId", connection))
+        {
+            command.Parameters.AddWithValue("@productId", id);
+        }
+
+        using (SqlDataReader reader = command.ExecuteReader())
+        {
+            if (reader.Read())
+            {
+                Console.WriteLine("Product is being used in orderProduct. Cannot delete.");
+                return;
+            }
+        }
+
+        SqlCommand deleteCmd = null;
+        using (deleteCmd = new SqlCommand("DELETE FROM product WHERE id = @ID", connection))
+        {
+            deleteCmd.Parameters.AddWithValue("@ID", id);
+            deleteCmd.ExecuteNonQuery();
+        }
+
+        Console.WriteLine("Product has been successfully removed");
     }
 
     public void Update(Product product)
@@ -99,4 +92,43 @@ public class ProductDAO : IDAO<Product>
         command.ExecuteNonQuery();
     }
 
+    /*static void ImportDataFromCsv(SqlConnection connection, string filePath, string tableName, Action<Product> insertMethod)
+    {
+        using (var reader = new StreamReader(filePath))
+        using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+        {
+            csv.Configuration.HasHeaderRecord = true;
+            csv.Read();
+            csv.ReadHeader();
+
+            if (csv.Context.HeaderRecord.Contains(tableName))
+            {
+                // Read data only for the specified table
+                var records = csv.GetRecords<Product>().ToList();
+                foreach (var record in records)
+                {
+                    insertMethod(record);
+                }
+            }
+        }
+    }
+
+    static List<Product> ReadCsvFile(string filePath, string tableName)
+    {
+        using (var reader = new StreamReader(filePath))
+        using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+        {
+            csv.Configuration.HasHeaderRecord = true;
+            csv.Read();
+            csv.ReadHeader();
+
+            if (csv.Context.HeaderRecord.Contains(tableName))
+            {
+                // Read data only for the specified table
+                return csv.GetRecords<Product>().ToList();
+            }
+
+            return new List<Product>();
+        }
+    }*/
 }

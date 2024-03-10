@@ -5,6 +5,10 @@ public class Supplier : IBaseClass
     public int Id { get; set; }
     public string Name { get; set; }
 
+    public Supplier()
+    {
+    }
+
     public Supplier(int id, string name)
     {
         Id = id;

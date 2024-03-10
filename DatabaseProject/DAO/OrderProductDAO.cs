@@ -3,36 +3,8 @@ using DatabaseProject.Entities;
 
 namespace DatabaseProject;
 
-public class OrderProductDAO
+public class OrderProductDAO : IDAO<OrderProduct>
 {
-    public OrderProduct GetById(int id)
-    {
-        OrderProduct orderProduct = null;
-        SqlConnection connection = DatabaseSingleton.GetInstance();
-        // 1. declare command object with parameter
-        using SqlCommand command = new SqlCommand("SELECT * FROM orderProduct WHERE id = @Id", connection);
-        // 2. define parameters used in command 
-        SqlParameter param = new SqlParameter();
-        param.ParameterName = "@Id";
-        param.Value = id;
-
-        // 3. add new parameter to command object
-        command.Parameters.Add(param);
-        SqlDataReader reader = command.ExecuteReader();
-
-        while (reader.Read())
-        {
-            orderProduct = new OrderProduct(
-                Convert.ToInt32(reader[0].ToString()),
-                Convert.ToInt32(reader[1].ToString()),
-                Convert.ToInt32(reader[2].ToString()),
-                Convert.ToInt32(reader[2].ToString())
-            );
-        }
-
-        reader.Close();
-        return orderProduct;
-    }
 
     public IEnumerable<OrderProduct> GetAll()
     {
@@ -53,31 +25,70 @@ public class OrderProductDAO
         reader.Close();
     }
 
-    public void Insert(OrderProduct orderProduct)
+    public void Add(OrderProduct orderProduct)
     {
+        // // Validate input parameters
+        // if (orderProduct.OrderId == null || orderProduct.ProductId == null)
+        // {
+        //     Console.WriteLine("Order ID and Product ID cannot be null. Ordered product not added.");
+        //     return;
+        // }
+
         SqlConnection connection = DatabaseSingleton.GetInstance();
 
-        SqlCommand command = null;
-
-        using var sqlCommand = command =
-            new SqlCommand("INSERT INTO orderProduct (order__id, product_id, quantity) VALUES (@order__id, @product_id, @quantity)", connection);
+        using var command = new SqlCommand("INSERT INTO orderProduct (order__id, product_id, quantity) VALUES (@order__id, @product_id, @quantity)", connection);
         command.Parameters.Add(new SqlParameter("@order__id", orderProduct.OrderId));
         command.Parameters.Add(new SqlParameter("@product_id", orderProduct.ProductId));
         command.Parameters.Add(new SqlParameter("@quantity", orderProduct.Quantity));
         command.ExecuteNonQuery();
-        //zjistim id posledniho vlozeneho zaznamu
-        command.CommandText = "Select @@Identity";
-        orderProduct.Id = Convert.ToInt32(command.ExecuteScalar());
+        Console.WriteLine("Order product added");
+        /*try
+        {
+            connection.Open();
+            
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error adding order product: {ex.Message}");
+        }
+        finally
+        {
+            connection.Close();
+        }*/
     }
 
-    public void Delete(OrderProduct orderProduct)
+    public void Delete(int id)
     {
         SqlConnection connection = DatabaseSingleton.GetInstance();
+        SqlCommand command = null;
 
-        using SqlCommand command = new SqlCommand("ALTER TABLE orderProduct DROP COLUMN id", connection);
-        command.Parameters.Add(new SqlParameter("@id", orderProduct.Id));
-        command.ExecuteNonQuery();
-        orderProduct.Id = 10;
+        
+        using (command = new SqlCommand("SELECT * FROM orderProduct WHERE id = @orderProductId", connection))
+        {
+            command.Parameters.AddWithValue("@orderProductId", id);
+        }
+
+        using (SqlDataReader reader = command.ExecuteReader())
+        {
+            if (reader.Read())
+            {
+
+                Console.WriteLine("Order item is being removed");
+            }
+            else
+            {
+                Console.WriteLine("Order item with this id was not found.");
+                return;
+            }
+        }
+
+        SqlCommand deleteCmd = null;
+        using (deleteCmd = new SqlCommand("DELETE FROM orderProduct WHERE id = @ID"))
+        {
+            deleteCmd.Parameters.AddWithValue("@ID", id); 
+            deleteCmd.ExecuteNonQuery();
+        }
+        Console.WriteLine("Order item has been successfully removed");
     }
 
     public void Update(OrderProduct orderProduct)
