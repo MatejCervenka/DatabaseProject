@@ -1,11 +1,20 @@
-﻿using DatabaseProject.Entities;
+﻿using DatabaseProject;
 
-namespace DatabaseProject;
-
-class Program
+namespace DatabaseProject
 {
-    static void Main(string[] args)
+    /// <summary>
+    /// The main program class responsible for starting the application.
+    /// </summary>
+    class Program
     {
-        UI.Start();
+        /// <summary>
+        /// The entry point of the application.
+        /// </summary>
+        /// <param name="args">Command-line arguments passed to the application.</param>
+        static void Main(string[] args)
+        {
+            // Start the user interface to interact with the database.
+            UI.Start();
+        }
     }
 }

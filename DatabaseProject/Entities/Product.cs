@@ -1,3 +1,5 @@
+using DatabaseProject.Interfaces;
+
 namespace DatabaseProject.Entities;
 
 public class Product : IBaseClass

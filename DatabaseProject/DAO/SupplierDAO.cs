@@ -1,94 +1,99 @@
 using System.Data.SqlClient;
 using DatabaseProject.Entities;
 
-namespace DatabaseProject;
-
-public class SupplierDAO : IDAO<Supplier>
+namespace DatabaseProject.DAO
 {
-    public IEnumerable<Supplier> GetAll()
+    /// <summary>
+    /// Data Access Object (DAO) for handling operations related to suppliers in the database.
+    /// </summary>
+    public class SupplierDAO : IDAO<Supplier>
     {
-        SqlConnection connection = DatabaseSingleton.GetInstance();
-                                                            
-        using SqlCommand command = new SqlCommand("SELECT * FROM supplier", connection);
-        SqlDataReader reader = command.ExecuteReader();
-        while (reader.Read())
+        /// <inheritdoc />
+        public IEnumerable<Supplier> GetAll()
         {
-            var supplier = new Supplier(
-                Convert.ToInt32(reader[0].ToString()),
-                reader[1].ToString()
-            );
-            yield return supplier;
-        }
-        reader.Close();
-    }
+            SqlConnection connection = DatabaseSingleton.GetInstance();
 
-    public void Add(Supplier supplier)
-    {
-        SqlConnection connection = DatabaseSingleton.GetInstance();
-
-        SqlCommand command = null;
-
-        using var sqlCommand = command = new SqlCommand("INSERT INTO supplier (name_) VALUES (@name_)", connection);
-        command.Parameters.Add(new SqlParameter("@name_", supplier.Name));
-        command.ExecuteNonQuery();
-        Console.WriteLine("Supplier added");
-    }
-
-    public void Delete(int id)
-    {
-        SqlConnection connection = DatabaseSingleton.GetInstance();
-        SqlCommand command = null;
-
-
-        using (command = new SqlCommand("SELECT * FROM supplier WHERE id = @supplierId", connection))
-        {
-            command.Parameters.AddWithValue("@supplierId", id);
-        }
-
-        using (SqlDataReader reader = command.ExecuteReader())
-        {
-            if (reader.Read())
+            using SqlCommand command = new SqlCommand("SELECT * FROM supplier", connection);
+            SqlDataReader reader = command.ExecuteReader();
+            while (reader.Read())
             {
-
-                Console.WriteLine("Supplier is being removed");
+                var supplier = new Supplier(
+                    Convert.ToInt32(reader[0].ToString()),
+                    reader[1].ToString()
+                );
+                yield return supplier;
             }
-            else
-            {
-                Console.WriteLine("Supplier with this id was not found.");
-                return;
-            }
+            reader.Close();
         }
 
-        SqlCommand deleteCmd = null;
-        using (deleteCmd = new SqlCommand("DELETE FROM supplier WHERE id = @ID", connection))
+        /// <inheritdoc />
+        public void Add(Supplier supplier)
         {
-            deleteCmd.Parameters.AddWithValue("@ID", id);
-            deleteCmd.ExecuteNonQuery();
-        }
+            SqlConnection connection = DatabaseSingleton.GetInstance();
 
-        Console.WriteLine("Supplier has been successfully removed");
-    }
-
-    public void Update(Supplier supplier)
-    {
-        SqlConnection connection = DatabaseSingleton.GetInstance();
-
-        SqlCommand command = null;
-        
-        using (command = new SqlCommand("UPDATE supplier SET name_ = @name_" +
-                                        "WHERE id = @id", connection))
-        {
-            command.Parameters.Add(new SqlParameter("@id", supplier.Id));
+            using SqlCommand command = new SqlCommand("INSERT INTO supplier (name_) VALUES (@name_)", connection);
             command.Parameters.Add(new SqlParameter("@name_", supplier.Name));
             command.ExecuteNonQuery();
+            Console.WriteLine("Supplier added");
         }
-    }
 
-    public void DeleteAll()
-    {
-        SqlConnection connection = DatabaseSingleton.GetInstance();
+        /// <inheritdoc />
+        public void Delete(int id)
+        {
+            SqlConnection connection = DatabaseSingleton.GetInstance();
+            SqlCommand command = null;
 
-        using SqlCommand command = new SqlCommand("DELETE FROM supplier", connection);
-        command.ExecuteNonQuery();
+            using (command = new SqlCommand("SELECT * FROM supplier WHERE id = @supplierId", connection))
+            {
+                command.Parameters.AddWithValue("@supplierId", id);
+            }
+
+            using (SqlDataReader reader = command.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    Console.WriteLine("Supplier is being removed");
+                }
+                else
+                {
+                    Console.WriteLine("Supplier with this id was not found.");
+                    return;
+                }
+            }
+
+            SqlCommand deleteCmd = null;
+            using (deleteCmd = new SqlCommand("DELETE FROM supplier WHERE id = @ID", connection))
+            {
+                deleteCmd.Parameters.AddWithValue("@ID", id);
+                deleteCmd.ExecuteNonQuery();
+            }
+
+            Console.WriteLine("Supplier has been successfully removed");
+        }
+
+        /// <inheritdoc />
+        public void Update(Supplier supplier)
+        {
+            SqlConnection connection = DatabaseSingleton.GetInstance();
+
+            SqlCommand command = null;
+
+            using (command = new SqlCommand("UPDATE supplier SET name_ = @name_" +
+                                            "WHERE id = @id", connection))
+            {
+                command.Parameters.Add(new SqlParameter("@id", supplier.Id));
+                command.Parameters.Add(new SqlParameter("@name_", supplier.Name));
+                command.ExecuteNonQuery();
+            }
+        }
+
+        /// <inheritdoc />
+        public void DeleteAll()
+        {
+            SqlConnection connection = DatabaseSingleton.GetInstance();
+
+            using SqlCommand command = new SqlCommand("DELETE FROM supplier", connection);
+            command.ExecuteNonQuery();
+        }
     }
 }
