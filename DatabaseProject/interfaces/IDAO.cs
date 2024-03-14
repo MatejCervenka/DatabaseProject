@@ -36,5 +36,7 @@ namespace DatabaseProject
         /// Deletes all elements of the specified type from the data store.
         /// </summary>
         void DeleteAll();
+        
+        T? GetById(int id);
     }
 }

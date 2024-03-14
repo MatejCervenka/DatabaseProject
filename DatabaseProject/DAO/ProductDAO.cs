@@ -99,6 +99,29 @@ namespace DatabaseProject.DAO
             command.ExecuteNonQuery();
         }
 
+        public Product? GetById(int id)
+        {
+            Product product = null;
+            SqlConnection connection = DatabaseSingleton.GetInstance();
+            using SqlCommand command = new SqlCommand("SELECT * FROM product WHERE id = @id", connection);
+
+            command.Parameters.Add(new SqlParameter("@id", id));
+            
+            SqlDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                product = new Product(
+                    Convert.ToInt32(reader[0].ToString()),
+                    reader[1].ToString(),
+                    Convert.ToDouble(reader[2].ToString())
+                );
+            }
+            reader.Close();
+
+            return product;
+        }
+
         /* Uncomment and implement if needed
         /// <summary>
         /// Imports data from a CSV file into the product table using the specified insert method.

@@ -1,3 +1,4 @@
+using System.Data;
 using System.Data.SqlClient;
 using DatabaseProject.Entities;
 
@@ -84,7 +85,7 @@ namespace DatabaseProject.DAO
         /// Updates an existing order in the database.
         /// </summary>
         /// <param name="order">The Order object containing updated information.</param>
-        public void Update(Order order)
+        /*public void Update(Order order)
         {
             SqlConnection connection = DatabaseSingleton.GetInstance();
 
@@ -98,6 +99,30 @@ namespace DatabaseProject.DAO
                 command.Parameters.Add(new SqlParameter("@isShipped", order.IsShipped));
                 command.ExecuteNonQuery();
             }
+        }*/
+        
+        public void Update(Order order)
+        { 
+            SqlConnection connection = DatabaseSingleton.GetInstance();
+            
+            using var command = new SqlCommand("UPDATE order_ SET orderDate = @orderDate, isShipped = @isShipped WHERE id = @id", connection);
+            // Add parameters
+            command.Parameters.Add("@id", SqlDbType.Int).Value = order.Id;
+            command.Parameters.Add("@orderDate", SqlDbType.DateTime).Value = order.OrderDate;
+            command.Parameters.Add("@isShipped", SqlDbType.Bit).Value = order.IsShipped;
+            
+            // Execute the command
+            int rowsAffected = command.ExecuteNonQuery();
+
+            // Check if any rows were affected
+            if (rowsAffected > 0)
+            {
+                Console.WriteLine("Order updated successfully.");
+            }
+            else
+            {
+                Console.WriteLine("No order found with the provided ID.");
+            }
         }
 
         /// <summary>
@@ -109,6 +134,29 @@ namespace DatabaseProject.DAO
 
             using SqlCommand command = new SqlCommand("DELETE FROM order_", connection);
             command.ExecuteNonQuery();
+        }
+        
+        public Order? GetById(int id)
+        {
+            Order order = null;
+            SqlConnection connection = DatabaseSingleton.GetInstance();
+            using SqlCommand command = new SqlCommand("SELECT * FROM order_ WHERE id = @id", connection);
+
+            command.Parameters.Add(new SqlParameter("@id", id));
+            
+            SqlDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                order = new Order(
+                    Convert.ToInt32(reader[0].ToString()),
+                    Convert.ToDateTime(reader[1].ToString()),
+                    Convert.ToBoolean(reader[2].ToString())
+                );
+            }
+            reader.Close();
+
+            return order;
         }
     }
 }

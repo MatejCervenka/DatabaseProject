@@ -1,0 +1,39 @@
+CREATE TABLE product(
+	id INT PRIMARY KEY IDENTITY(1,1),
+	name_ VARCHAR(20) NOT NULL,
+	price DECIMAL NOT NULL
+);
+
+CREATE TABLE customer(
+	id INT PRIMARY KEY IDENTITY(1,1),
+	name_ VARCHAR(20) NOT NULL
+);
+
+CREATE TABLE supplier(
+	id INT PRIMARY KEY IDENTITY(1,1),
+	name_ VARCHAR(20) NOT NULL
+);
+
+CREATE TABLE order_(
+	id INT PRIMARY KEY IDENTITY(1,1),
+	orderDate DATE NOT NULL,
+	isShipped BIT NOT NULL
+);
+
+CREATE TABLE orderProduct(
+	id INT PRIMARY KEY IDENTITY(1,1),
+	order__id INT FOREIGN KEY REFERENCES order_(id),
+	product_id INT FOREIGN KEY REFERENCES product(id),
+	quantity INT NOT NULL
+);
+
+
+SELECT * FROM customer;
+
+SELECT * FROM order_;
+
+SELECT * FROM orderProduct;
+
+SELECT * FROM product;
+
+SELECT * FROM supplier;

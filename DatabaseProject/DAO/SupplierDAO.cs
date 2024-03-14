@@ -95,5 +95,27 @@ namespace DatabaseProject.DAO
             using SqlCommand command = new SqlCommand("DELETE FROM supplier", connection);
             command.ExecuteNonQuery();
         }
+
+        public Supplier? GetById(int id)
+        {
+            Supplier supplier = null;
+            SqlConnection connection = DatabaseSingleton.GetInstance();
+            using SqlCommand command = new SqlCommand("SELECT * FROM supplier WHERE id = @id", connection);
+
+            command.Parameters.Add(new SqlParameter("@id", id));
+            
+            SqlDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                supplier = new Supplier(
+                    Convert.ToInt32(reader[0].ToString()),
+                    reader[1].ToString()
+                );
+            }
+            reader.Close();
+
+            return supplier;
+        }
     }
 }
