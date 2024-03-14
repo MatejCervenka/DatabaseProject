@@ -85,21 +85,6 @@ namespace DatabaseProject.DAO
         /// Updates an existing order in the database.
         /// </summary>
         /// <param name="order">The Order object containing updated information.</param>
-        /*public void Update(Order order)
-        {
-            SqlConnection connection = DatabaseSingleton.GetInstance();
-
-            SqlCommand command = null;
-
-            using (command = new SqlCommand("UPDATE order_ SET orderDate = @orderDate, isShipped = @isShipped" +
-                                            "WHERE id = @id", connection))
-            {
-                command.Parameters.Add(new SqlParameter("@id", order.Id));
-                command.Parameters.Add(new SqlParameter("@orderDate", order.OrderDate));
-                command.Parameters.Add(new SqlParameter("@isShipped", order.IsShipped));
-                command.ExecuteNonQuery();
-            }
-        }*/
         
         public void Update(Order order)
         { 
