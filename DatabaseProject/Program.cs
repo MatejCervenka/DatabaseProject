@@ -1,4 +1,4 @@
-﻿using DatabaseProject;
+﻿using DatabaseProject.ui;
 
 namespace DatabaseProject
 {

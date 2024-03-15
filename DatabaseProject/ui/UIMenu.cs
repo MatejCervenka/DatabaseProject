@@ -1,4 +1,4 @@
-namespace DatabaseProject
+namespace DatabaseProject.ui
 {
     /// <summary>
     /// Represents a user interface menu for interacting with the database.
@@ -6,63 +6,164 @@ namespace DatabaseProject
     public class UIMenu
     {
         private List<string> menu = new List<string>();
-        private bool isFilled = false;
-
-        /// <summary>
-        /// Adds a new item to the menu.
-        /// </summary>
-        /// <param name="item">The item to add to the menu.</param>
-        public void AddItem(string item)
-        {
-            menu.Add(item);
-        }
+        private bool isMainFilled = false;
+        private bool isAddFilled = false;
+        private bool isUpdateFilled = false;
+        private bool isDeleteFilled = false;
+        private bool isListAllFilled = false;
+        private bool isDeleteAllFilled = false;
 
         /// <summary>
         /// Fills the menu with predefined options.
         /// </summary>
-        public void FillMenu()
+
+        private void FillMainMenu()
         {
-            Console.WriteLine();
+            Console.WriteLine("");
+            menu.Add("----------------1) ADD");
+            menu.Add("----------------2) UPDATE");
+            menu.Add("----------------3) DELETE");
+            menu.Add("----------------4) LIST ALL");
+            menu.Add("----------------5) DELETE ALL");
+            menu.Add("----------------6) QUIT");
+        }
+        private void FillAddMenu()
+        {
+            Console.WriteLine("");
             menu.Add("----------------1) Add an order");
             menu.Add("----------------2) Add a product");
             menu.Add("----------------3) Add an ordered product");
             menu.Add("----------------4) Add a supplier");
             menu.Add("----------------5) Add a customer");
-            menu.Add("----------------6) Update an order");
-            menu.Add("----------------7) Update a product");
-            menu.Add("----------------8) Update an ordered product");
-            menu.Add("----------------9) Update a supplier");
-            menu.Add("----------------10) Update a customer");
-            menu.Add("----------------11) Delete an order");
-            menu.Add("----------------12) Delete a product");
-            menu.Add("----------------13) Delete an ordered product");
-            menu.Add("----------------14) Delete a supplier");
-            menu.Add("----------------15) Delete a customer");
-            menu.Add("----------------16) List all orders");
-            menu.Add("----------------17) List all products");
-            menu.Add("----------------18) List all ordered products");
-            menu.Add("----------------19) List all suppliers");
-            menu.Add("----------------20) List all customers");
-            menu.Add("----------------21) Delete all orders");
-            menu.Add("----------------22) Delete all products");
-            menu.Add("----------------23) Delete all ordered products");
-            menu.Add("----------------24) Delete all suppliers");
-            menu.Add("----------------25) Delete all customers");
-            menu.Add("----------------26) List all tables");
-            menu.Add("----------------27) Import customers");
-            menu.Add("----------------28) Import suppliers");
-            menu.Add("----------------29) Quit");
+            menu.Add("----------------6) Import customers");
+            menu.Add("----------------7) Import suppliers");
+            menu.Add("----------------8) RETURN TO MAIN MENU");
+        }
+
+        private void FillUpdateMenu()
+        {
+            Console.WriteLine("");
+            menu.Add("----------------1) Update an order");
+            menu.Add("----------------2) Update a product");
+            menu.Add("----------------3) Update an ordered product");
+            menu.Add("----------------4) Update a supplier");
+            menu.Add("----------------5) Update a customer");
+            menu.Add("----------------6) RETURN TO MAIN MENU");
+        }
+
+        private void FillDeleteMenu()
+        {
+            Console.WriteLine("");
+            menu.Add("----------------1) Delete an order");
+            menu.Add("----------------2) Delete a product");
+            menu.Add("----------------3) Delete an ordered product");
+            menu.Add("----------------4) Delete a supplier");
+            menu.Add("----------------5) Delete a customer");
+            menu.Add("----------------6) RETURN TO MAIN MENU");
+        }
+
+        private void FillListAllMenu()
+        {
+            Console.WriteLine("");
+            menu.Add("----------------1) List all orders");
+            menu.Add("----------------2) List all products");
+            menu.Add("----------------3) List all ordered products");
+            menu.Add("----------------4) List all suppliers");
+            menu.Add("----------------5) List all customers");
+            menu.Add("----------------6) List all tables");
+            menu.Add("----------------7) RETURN TO MAIN MENU");
+        }
+        private void FillDeleteAllMenu()
+        {
+            Console.WriteLine("");
+            menu.Add("----------------1) Delete all orders");
+            menu.Add("----------------2) Delete all products");
+            menu.Add("----------------3) Delete all ordered products");
+            menu.Add("----------------4) Delete all suppliers");
+            menu.Add("----------------5) Delete all customers");
+            menu.Add("----------------6) RETURN TO MAIN MENU");
         }
 
         /// <summary>
-        /// Prints the filled menu to the console.
+        /// Prints the filled menus to the console.
         /// </summary>
-        public void Print()
+       
+        public void PrintMainMenu()
         {
-            if (!isFilled)
+            if (!isMainFilled)
             {
-                FillMenu();
-                isFilled = true;
+                FillMainMenu();
+                isMainFilled = true;
+            }
+
+            foreach (string item in menu)
+            {
+                Console.WriteLine(item);
+            }
+        }
+        public void PrintAddMenu()
+        {
+            if (!isAddFilled)
+            {
+                FillAddMenu();
+                isAddFilled = false;
+            }
+
+            foreach (string item in menu)
+            {
+                Console.WriteLine(item);
+            }
+        }
+        
+        public void PrintUpdateMenu()
+        {
+            if (!isUpdateFilled)
+            {
+                FillUpdateMenu();
+                isUpdateFilled = false;
+            }
+
+            foreach (string item in menu)
+            {
+                Console.WriteLine(item);
+            }
+        }
+        
+        
+        public void PrintDeleteMenu()
+        {
+            if (!isDeleteFilled)
+            {
+                FillDeleteMenu();
+                isDeleteFilled = false;
+            }
+
+            foreach (string item in menu)
+            {
+                Console.WriteLine(item);
+            }
+        }
+        
+        public void PrintListAllMenu()
+        {
+            if (!isListAllFilled)
+            {
+                FillListAllMenu();
+                isListAllFilled = false;
+            }
+
+            foreach (string item in menu)
+            {
+                Console.WriteLine(item);
+            }
+        }
+        
+        public void PrintDeleteAllMenu()
+        {
+            if (!isDeleteAllFilled)
+            {
+                FillDeleteAllMenu();
+                isDeleteAllFilled = false;
             }
 
             foreach (string item in menu)
